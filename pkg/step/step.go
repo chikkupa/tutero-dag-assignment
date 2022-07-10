@@ -8,8 +8,9 @@ type Stepper interface {
 }
 
 func New() *stepper {
+	newStepper := new(stepper)
 	//* You may mutate this instantiation if necessary; but the function signature should not change.
-	return &stepper{}
+	return newStepper
 }
 
 type stepper struct {
@@ -18,5 +19,23 @@ type stepper struct {
 
 func (s *stepper) Step(graph graph.Graph) (graph.Node, error) {
 	//* Implement the Step function.
-	return graph.Nodes()[len(graph.Nodes())-1], nil // nieve solution -- returns a random node.
+
+	allNodes := graph.Nodes()
+
+	if len(allNodes) == 0 {
+		return "", nil
+	}
+
+	nodeMostRelation := graph.Nodes()[len(allNodes)-1]
+	noRelations := len(graph.Children(nodeMostRelation)) + len(graph.Parents(nodeMostRelation))
+
+	for _, node := range allNodes {
+		noNodeRelations := len(graph.Children(node)) + len(graph.Parents(node))
+		if noNodeRelations > noRelations {
+			nodeMostRelation = node
+			noRelations = noNodeRelations
+		}
+	}
+
+	return graph.Nodes()[len(allNodes)-1], nil
 }
