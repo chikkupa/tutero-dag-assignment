@@ -33,7 +33,7 @@ func getTestCases() []TestCase {
 	testgraph1.AddEdge(nodes[0], nodes[3])
 
 	testcases := []TestCase{
-		{testgraph1, nodes[0], nil},
+		{testgraph1, nodes[4], nil},
 		{testgraph2, nodes[0], errors.New("Empty graph")},
 	}
 
@@ -46,7 +46,7 @@ func TestStep(t *testing.T) {
 	for index, test := range testCases {
 		stepper := New()
 		node, err := stepper.Step(test.graph)
-		if err != nil && node != test.expected {
+		if err == nil && node != test.expected {
 			t.Fatalf("Test case %d: Test failed", index+1)
 		} else if err != nil && test.errors == nil {
 			t.Fatalf("Test case %d: Error expected!", index+1)
